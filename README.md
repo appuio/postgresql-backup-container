@@ -12,9 +12,23 @@ This repo ist inspired by the MySQL backup container: https://github.com/appuio/
 ## Docker only
 
 ### Start PostgreSQL database
-Run a PostgreSQL 9.5 Database container.
+Run a PostgreSQL Database container.
 
-    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:9.5
+    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+
+Run a Crunchy PostgreSQL Database container.
+
+    docker run \
+      --name some-postgres \
+      -e "PG_MODE=master" \
+      -e "PG_MASTER_USER=master" \
+      -e "PG_MASTER_PASSWORD=master.chief" \
+      -e "PG_USER=postgres" \
+      -e "PG_PASSWORD=mysecretpassword" \
+      -e "PG_DATABASE=postgres" \
+      -e "PG_ROOT_PASSWORD=mysecretpassword2" \
+      -d -p 5432:5432 \
+      crunchydata/crunchy-postgres:centos7-9.5-1.2.5
 
 Init Database.
 
@@ -37,8 +51,10 @@ Create backup directory:
 Start backup container:
 
     docker run -ti \
-      -e "BACKUP_HOST=localhost" \
+      -e "BACKUP_HOST=postgresdb" \
       -e "BACKUP_USER=postgres" \
       -e "BACKUP_PASS=mysecretpassword" \
       -e "BACKUP_PORT=5432" \
-      -v $(pwd)/pgdata/:/pgdata/ pg_backup
+      -v $(pwd)/pgdata:/pgdata \
+      --link some-postgres:postgresdb \
+      pg_backup
