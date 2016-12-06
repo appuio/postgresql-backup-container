@@ -41,4 +41,4 @@ Start backup container:
       -e "BACKUP_USER=postgres" \
       -e "BACKUP_PASS=mysecretpassword" \
       -e "BACKUP_PORT=5432" \
-      -v pgdata:/pgdata pg_backup
+      -v $(pwd)/pgdata/:/pgdata/ pg_backup
