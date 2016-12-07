@@ -9,6 +9,12 @@ The backup container is not finished jet: work in progress.
 
 This repo ist inspired by the MySQL backup container: https://github.com/appuio/mysql-simple-backup-container
 
+## Prerequisites
+
+### PostgreSQL Database
+* The database has to be set up with a master user and it's password.
+* The database has to be configured to allow remote access from other hosts.
+
 ## Docker only
 
 ### Start PostgreSQL database

@@ -1,0 +1,32 @@
+version: '2'
+services:
+  postgresdb:
+    image: openshift/postgresql-92-centos7
+    ports:
+     - "5432:5432"
+    networks:
+     - back-tier
+    environment:
+     - POSTGRES_PASSWORD=mysecretpassword
+     - POSTGRESQL_USER=postgresuser
+     - POSTGRESQL_PASSWORD=mysecretpassword
+     - POSTGRESQL_DATABASE=postgresdb
+     - POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2
+  backup:
+    build: .
+    volumes:
+     - $PWD/pgdata:/pgdata
+    networks:
+     - back-tier
+    links:
+     - postgresdb
+    environment:
+     - BACKUP_HOST=postgresdb
+     - BACKUP_USER=postgres
+     - BACKUP_PASS=mysecretpassword2
+     - POSTGRESQL_DATABASE=postgresdb
+     - BACKUP_PORT=5432
+     - BACKUP_DATA_DIR=/pgdata/back
+networks:
+  back-tier:
+    driver: bridge
