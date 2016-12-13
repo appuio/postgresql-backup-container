@@ -14,6 +14,7 @@ This repo ist inspired by the MySQL backup container: https://github.com/appuio/
 ### PostgreSQL Database
 * The database has to be set up with a master user and it's password.
 * The database has to be configured to allow remote access from other hosts.
+* The database user for the backup has to have superuser or replication role.
 
 ## Docker only
 

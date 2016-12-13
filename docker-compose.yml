@@ -1,7 +1,7 @@
 version: '2'
 services:
   postgresdb:
-    image: openshift/postgresql-92-centos7
+    build: database/
     ports:
      - "5432:5432"
     networks:
@@ -27,6 +27,7 @@ services:
      - POSTGRESQL_DATABASE=postgresdb
      - BACKUP_PORT=5432
      - BACKUP_DATA_DIR=/pgdata/back
+     - BACKUP_KEEP=5
 networks:
   back-tier:
     driver: bridge
