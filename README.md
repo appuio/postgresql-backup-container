@@ -15,6 +15,35 @@ This repo ist inspired by the MySQL backup container: https://github.com/appuio/
 * The database has to be set up with a master user and it's password.
 * The database has to be configured to allow remote access from other hosts.
 * The database user for the backup has to have superuser or replication role.
+* The database has to be set up to allow remote backup connections.
+ * For this, add following configuration to the PostgreSQL configuration file `/etc/postgresql/X.X/main/postgresql.conf`
+ * Use your database version for 'X.X'. As example: '9.5'
+
+
+    max_wal_senders = 5
+    wal_level = hot_standby
+    archive_mode = on
+    archive_command = '/bin/true'
+
+## OpenShift
+Usage on OpenShift.
+
+### PostgreSQL Database
+How to create and run the PostgreSQL database.
+
+Create the container with the `oc tool`:
+
+    oc new-app \
+      -e POSTGRES_PASSWORD=mysecretpassword \
+      -e POSTGRESQL_USER=postgresuser \
+      -e POSTGRESQL_PASSWORD=mysecretpassword \
+      -e POSTGRESQL_DATABASE=postgresdb \
+      -e POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
+      centos/postgresql-95-centos7
+
+More documentation for [PostgreSQL on OpenShift](https://docs.openshift.org/latest/using_images/db_images/postgresql.html).
+
+The PostgreSQL database container on [github](https://github.com/sclorg/postgresql-container).
 
 ## Docker only
 
