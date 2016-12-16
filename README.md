@@ -45,6 +45,22 @@ More documentation for [PostgreSQL on OpenShift](https://docs.openshift.org/late
 
 The PostgreSQL database container on [github](https://github.com/sclorg/postgresql-container).
 
+### Database Backup Container
+
+Create and run PostgreSQL backukp Container on OpenShift.
+
+oc new-app \
+  -e BACKUP_HOST=localhost \
+  -e BACKUP_USER=postgres \
+  -e BACKUP_PASS=mysecretpassword \
+  -e BACKUP_PORT=5432 \
+  -l app=backup \
+  https://github.com/appuio/postgresql-simple-backup-container
+
+### Next steps
+
+Create and provide OpenShift templates for backup container and combined with the database.
+
 ## Docker only
 
 ### Start PostgreSQL database
