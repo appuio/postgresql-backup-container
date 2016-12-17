@@ -31,7 +31,7 @@ Usage on OpenShift.
 ### PostgreSQL Database
 How to create and run the PostgreSQL database.
 
-Create the container with the `oc tool`:
+Create the container with the `oc tool` from Docker Image:
 
     oc new-app \
       -e POSTGRES_PASSWORD=mysecretpassword \
@@ -39,7 +39,30 @@ Create the container with the `oc tool`:
       -e POSTGRESQL_PASSWORD=mysecretpassword \
       -e POSTGRESQL_DATABASE=postgresdb \
       -e POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
+      -l app=postgresd \
       centos/postgresql-95-centos7
+
+Create the container with the `oc tool` from installed template:
+
+    oc new-app --template=postgresql-ephemeral \
+      --param=POSTGRESQL_USER=postgresuser \
+      --param=POSTGRESQL_PASSWORD=mysecretpassword \
+      --param=POSTGRESQL_DATABASE=postgresdb \
+      --param=DATABASE_SERVICE_NAME=postgresqldb \
+      -l app=postgresdb
+
+Create the container with the `oc tool` from local template:
+
+    oc process -f postgresql-ephemeral-template.json \
+      -v \
+      POSTGRES_PASSWORD=mysecretpassword \
+      POSTGRESQL_USER=postgresuser \
+      POSTGRESQL_PASSWORD=mysecretpassword \
+      POSTGRESQL_DATABASE=postgresdb \
+      POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
+      DATABASE_SERVICE_NAME=postgresqldb \
+  | oc create -f -
+
 
 More documentation for [PostgreSQL on OpenShift](https://docs.openshift.org/latest/using_images/db_images/postgresql.html).
 
@@ -60,6 +83,12 @@ oc new-app \
 ### Next steps
 
 Create and provide OpenShift templates for backup container and combined with the database.
+
+OpenShift templates:
+
+* https://github.com/openshift/origin/blob/master/examples/db-templates/postgresql-ephemeral-template.json
+* https://github.com/openshift/origin/blob/master/examples/db-templates/postgresql-persistent-template.json
+
 
 ## Docker only
 

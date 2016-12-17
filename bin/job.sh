@@ -1,6 +1,21 @@
 #!/bin/sh
 DATE=$(date +%Y-%m-%d-%H-%M)
-# dump=$(mysqldump --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$MYSQL_SERVICE_HOST $MYSQL_DATABASE)
+
+if [ -z $BACKUP_HOST ]; then
+  if [ -v $POSTGRESQLDB_SERVICE_HOST ]; then
+    echo "BACKUP_HOST fallback to POSTGRESQLDB_SERVICE_HOST";
+    export BACKUP_HOST=$POSTGRESQLDB_SERVICE_HOST
+  fi
+fi
+
+if [ -z $BACKUP_HOST ]; then
+  echo "no BACKUP_HOST configured!"
+  exit 1
+else
+  echo "used BACKUP_HOST '$BACKUP_HOST'";
+fi
+
+# call backup script
 dump=$(/opt/cpm/bin/start-backupjob.sh)
 
 if [ $? -ne 0 ]; then
