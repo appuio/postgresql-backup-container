@@ -2,7 +2,7 @@
 DATE=$(date +%Y-%m-%d-%H-%M)
 
 if [ -z $BACKUP_HOST ]; then
-  if [ -v $POSTGRESQLDB_SERVICE_HOST ]; then
+  if [ -n $POSTGRESQLDB_SERVICE_HOST ]; then
     echo "BACKUP_HOST fallback to POSTGRESQLDB_SERVICE_HOST";
     export BACKUP_HOST=$POSTGRESQLDB_SERVICE_HOST
   fi
