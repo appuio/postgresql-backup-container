@@ -40,7 +40,7 @@ Create the container with the `oc tool` from Docker Image:
       -e POSTGRESQL_PASSWORD=mysecretpassword \
       -e POSTGRESQL_DATABASE=postgresdb \
       -e POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
-      -l app=postgresd \
+      -l app=postgresdb \
       centos/postgresql-95-centos7
 
 #### Install by provided template
@@ -73,10 +73,30 @@ Create the container with the `oc tool` from local template:
       DATABASE_SERVICE_NAME=postgresqldb \
     | oc create -f -
 
+#### Install by Dockerfile
+Create the container with the `oc tool` from the local db Dockerfile. It is patched to allow remote connections.
+
+    oc new-app \
+      -e POSTGRES_PASSWORD=mysecretpassword \
+      -e POSTGRESQL_USER=postgresuser \
+      -e POSTGRESQL_PASSWORD=mysecretpassword \
+      -e POSTGRESQL_DATABASE=postgresdb \
+      -e POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
+      -e DATABASE_SERVICE_NAME=postgresqldb \
+      -l app=postgresdb \
+      https://github.com/appuio/postgresql-simple-backup-container \
+      --context-dir=database \
+      --name=postgresqldb
+
 #### Official documentation
 More documentation for [PostgreSQL on OpenShift](https://docs.openshift.org/latest/using_images/db_images/postgresql.html).
 
 The PostgreSQL database container on [github](https://github.com/sclorg/postgresql-container).
+
+#### Container deletion
+Delete all resources owned by the database container.
+
+    oc delete all -l app=postgresdb
 
 ### Database Backup Container
 Create and run PostgreSQL backukp Container on OpenShift.
