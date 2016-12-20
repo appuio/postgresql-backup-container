@@ -31,6 +31,7 @@ Usage on OpenShift.
 ### PostgreSQL Database
 How to create and run the PostgreSQL database.
 
+#### Install by Docker Image
 Create the container with the `oc tool` from Docker Image:
 
     oc new-app \
@@ -42,6 +43,7 @@ Create the container with the `oc tool` from Docker Image:
       -l app=postgresd \
       centos/postgresql-95-centos7
 
+#### Install by provided template
 Create the container with the `oc tool` from installed template:
 
     oc new-app --template=postgresql-ephemeral \
@@ -51,6 +53,14 @@ Create the container with the `oc tool` from installed template:
       --param=DATABASE_SERVICE_NAME=postgresqldb \
       -l app=postgresdb
 
+Edit the deployment configuration and add the master password as env variable.
+
+    env:
+      -
+        name: POSTGRESQL_ADMIN_PASSWORD
+        value: mysecretpassword2
+
+#### Install by local template file
 Create the container with the `oc tool` from local template:
 
     oc process -f postgresql-ephemeral-template.json \
@@ -61,24 +71,26 @@ Create the container with the `oc tool` from local template:
       POSTGRESQL_DATABASE=postgresdb \
       POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
       DATABASE_SERVICE_NAME=postgresqldb \
-  | oc create -f -
+    | oc create -f -
 
-
+#### Official documentation
 More documentation for [PostgreSQL on OpenShift](https://docs.openshift.org/latest/using_images/db_images/postgresql.html).
 
 The PostgreSQL database container on [github](https://github.com/sclorg/postgresql-container).
 
 ### Database Backup Container
-
 Create and run PostgreSQL backukp Container on OpenShift.
 
-oc new-app \
-  -e BACKUP_HOST=localhost \
-  -e BACKUP_USER=postgres \
-  -e BACKUP_PASS=mysecretpassword \
-  -e BACKUP_PORT=5432 \
-  -l app=backup \
-  https://github.com/appuio/postgresql-simple-backup-container
+    oc new-app \
+      -e BACKUP_USER=postgres \
+      -e BACKUP_PASS=mysecretpassword2 \
+      -e BACKUP_PORT=5432 \
+      -l app=backup \
+      https://github.com/appuio/postgresql-simple-backup-container
+
+Delete all resources owned by the backup container.
+
+    oc delete all -l app=backup
 
 ### Next steps
 
