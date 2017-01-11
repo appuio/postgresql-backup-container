@@ -1,5 +1,7 @@
-# postgresql-simple-backup-container
-Container to backup PostgreSQL databases running on OpenShift
+# postgresql-backup-container
+Container to do full backups of PostgreSQL databases running on OpenShift. The backup is done by the `pg_basebackup` tool.
+
+Simpler backups using `pg_dump` are available in the [postgresql-simple-backup-container](https://github.com/appuio/postgresql-simple-backup-container) repository.
 
 ## Intention
 Provide a container that does periodical backups of a PostgreSQL database.
@@ -21,8 +23,11 @@ This repo ist inspired by the MySQL backup container: https://github.com/appuio/
 
 
     max_wal_senders = 5
+    
     wal_level = hot_standby
+    
     archive_mode = on
+    
     archive_command = '/bin/true'
 
 ## OpenShift
@@ -84,7 +89,7 @@ Create the container with the `oc tool` from the local db Dockerfile. It is patc
       -e POSTGRESQL_ADMIN_PASSWORD=mysecretpassword2 \
       -e DATABASE_SERVICE_NAME=postgresqldb \
       -l app=postgresdb \
-      https://github.com/appuio/postgresql-simple-backup-container \
+      https://github.com/appuio/postgresql-backup-container \
       --context-dir=database \
       --name=postgresqldb
 
@@ -106,7 +111,7 @@ Create and run PostgreSQL backukp Container on OpenShift.
       -e BACKUP_PASS=mysecretpassword2 \
       -e BACKUP_PORT=5432 \
       -l app=backup \
-      https://github.com/appuio/postgresql-simple-backup-container
+      https://github.com/appuio/postgresql-backup-container
 
 Delete all resources owned by the backup container.
 
