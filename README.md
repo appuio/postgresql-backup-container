@@ -1,3 +1,8 @@
+# Deprecated
+
+!!! Use https://github.com/appuio/postgres-backup-cronjob instead!!!
+
+
 # postgresql-backup-container
 Container to do full backups of PostgreSQL databases running on OpenShift. The backup is done by the `pg_basebackup` tool.
 
